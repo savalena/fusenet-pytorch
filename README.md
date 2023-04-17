@@ -17,11 +17,9 @@ This is the PyTorch implementation for FuseNet, developed based on [Pix2Pix](htt
 ```bash
 git clone https://github.com/MehmetAygun/fusenet-pytorch
 cd fusenet-pytorch
-pip install -r requirements.txt
+pip install -r requirements.txt (torch==1.12.0+cu116 worked)
 ```
 ## Dataset preparation
-### sunrgbd dataset
-- Download and untar the [preprocessed sunrgbd](https://vision.in.tum.de/webarchive/hazirbas/fusenet-pytorch/sun/sunrgbd.tar.gz) dataset under ```/datasets/sunrgbd```
 
 ### nyuv2 dataset
 - Download the dataset and create the training set
@@ -30,21 +28,18 @@ cd datasets
 sh download_nyuv2.sh
 python create_training_set.py
 ```
-### scannetv2 dataset
-- Download the ```scannet_frames_25k``` and ```scannet_frames_test``` under ```/datasets/scannet/tasks/```
+
+- To process the TUM RGBD dataset use the custom script in semantics-research repo
 
 ## FuseNet train/test
 
-### visdom visualization
-- To view training errors and loss plots, set `--display_id 1`, run `python -m visdom.server` and click the URL http://localhost:8097
-- Checkpoints are saved under `./checkpoints/sunrgbd/`
-
-### train & test on sunrgbd
-```bash
-python train.py --dataroot datasets/sunrgbd --dataset sunrgbd --name sunrgbd
-
-python test.py --dataroot datasets/sunrgbd --dataset sunrgbd --name sunrgbd --epoch 400
+- Checkpoints are saved under `checkpoints/nyuv2/`
+- Download checkpoints
+```angular2html
+curl https://cvg.cit.tum.de/webarchive/hazirbas/fusenet-pytorch/nyu/400_net_FuseNet.pth \
+--output 400_net_FuseNet.pth
 ```
+
 
 ### train & test on nyuv2
 ```bash
@@ -53,19 +48,9 @@ python train.py --dataroot datasets/nyuv2 --dataset nyuv2 --name nyuv2
 python test.py --dataroot datasets/nyuv2 --dataset nyuv2 --name nyuv2 --epoch 400
 ```
 
-### train & val & test on scannetv2
-```bash
-python train.py --dataroot datasets/scannet/tasks/scannet_frames_25k --dataset scannetv2 \
-                --name scannetv2
-
-python test.py --dataroot datasets/scannet/tasks/scannet_frames_25k --dataset scannetv2 \
-               --name scannetv2 --epoch 380 --phase val
-
-python test.py --dataroot datasets/scannet/tasks/scannet_frames_test --dataset scannetv2 \
-               --name scannetv2 --epoch 380 --phase test
-```
 
 ## Results
+#### See in folder `/results` for TUM dataset
 * We use the training scheme defined in FuseNet
 * Loss is weighted for SUNRGBD dataset
 * Learning rate is set to 0.01 for NYUv2 dataset
